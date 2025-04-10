@@ -32,18 +32,18 @@ body {
     width: 28vw;
     height: 30vh;
     top: 41.5%; 
-    left: 35%; 
+    left: 37%; 
     cursor: pointer;
     z-index: 3;
 }
 
 .fixedScreen {
     position: fixed; 
-    top: 0;
+    top: -20vh;
     right: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 5;
+    z-index: 0;
 }
 
 .zoom {
@@ -60,6 +60,18 @@ body {
 
 /* Menü */
 
+nav {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 50vh;
+    left: 15vw;
+    width: 70%;
+    justify-content: space-around;
+    height: 15vh;
+    z-index: 1000;
+}
+
 .screen {
     height: 100vh;
     width: 100vw;
@@ -68,7 +80,6 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 2;
 }
 
 #title {
@@ -80,17 +91,6 @@ body {
     top: 25vh;
 }
 
-nav {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    top: 50vh;
-    left: 15vw;
-    width: 70%;
-    justify-content: space-around;
-    height: 15vh;
-}
-
 .button {
     height: 15vh;
     width: fit-content;
@@ -99,4 +99,44 @@ nav {
     font-size: 11vh;
     padding-left: 4%;
     padding-right: 4%;
+}
+
+.asteroidstitle {
+    position: relative;
+    top: -10vh;
+    z-index: 0;
+}
+
+#arcadeScreenEdge {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    z-index: 0;
+    display: none;
+    left: 0;
+}
+
+/* Options */
+
+h1 {
+    width: fit-content;
+    height: 10vh;
+    font-family: 'exo';
+    font-size: 15vh;
+    color: white;
+    margin-left: 35vw;
+    text-decoration: underline 2px;
+}
+
+h2 {
+    width: fit-content;
+    height: 7vh;
+    font-family: 'exo';
+    font-size: 7vh;
+    border: white solid 3px;
+    color: white;
+    padding: 2vh;
+    padding-top: 1.6vh;
+    margin-left: 20vw;
+    border-radius: 5%;
 }

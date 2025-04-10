@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asteroids</title>
     <link rel="stylesheet" href="style.css">
-    <script src="game.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body>
-        <img id="arcadeMachine" onclick="zoomIn()" src="../images/ArcadeMashine.png" alt="">
+<body id="body">
+    <img id="arcadeMachine" onclick="zoomIn()" src="../images/ArcadeMashine.png" alt="">
     <img id="arcadeScreen" onclick="zoomIn()" src="../images/ArcadeScreen-empty.png" alt="">
-    <canvas id="canvas"></canvas>
     <div class="screen" id="menu">
-        <img id="title" src="../images/Asteroids.png">
-        <nav>
+        <nav id="navigation">
             <p class="button" onclick="gameStart()">Game</p>
             <p class="button" onclick="options()">Options</p>
         </nav>
+        <img class="asteroidsTitle" id="title" src="../images/Asteroids.png">
+        <img id="arcadeScreenEdge" src="../images/ArcadeScreen-empty.png">
     </div>
 </body>
 </html>
