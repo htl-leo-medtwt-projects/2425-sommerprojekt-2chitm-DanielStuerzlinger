@@ -16,7 +16,44 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #000000;
+    display: fixed;
 }
+
+/* Aufforderung */
+
+#clickHint {
+    position: absolute;
+    color: white;
+    font-size: 8vh;
+    font-weight: bold;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.show-click {
+    animation: pulse 2.5s ease-in-out infinite;
+    opacity: 1;
+}
+
 
 /* Arcade Zoom */
 
@@ -28,37 +65,64 @@ body {
 }
 
 #arcadeScreen {
-    position: absolute; 
-    width: 28vw;
-    height: 30vh;
-    top: 41.5%; 
-    left: 37%; 
+    position: absolute;
+    width: 28.5vw;
+    height: 26vh;
+    top: 37%; 
+    left: 36.5%; 
     cursor: pointer;
     z-index: 3;
-}
-
-.fixedScreen {
-    position: fixed; 
-    top: -20vh;
-    right: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
+    transition: transform 0.4s ease;
 }
 
 .zoom {
-    transform: scale(4);
-    left: 0;
-    transition: transform 0.45s ease;
+    transform: scale(20.5);
+    transition: transform 0.9s ease;
     z-index: 0;
 }
 
 .zoomScreen {
-    transform: scale(3.7);
-    transition: transform 0.4s ease;
+    transform: scale(6.5);
+    transition: transform 1.5s ease !;
+}
+
+/* Anfangs Animation */
+
+@keyframes fadeInMove {
+    0% {
+        opacity: 0;
+        transform: translateY(20vh);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        transform: translate(0, -5vh);
+    }
+}
+
+@keyframes fadeButtonsOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fade-in-move {
+    animation: fadeInMove 2s ease-out forwards;
 }
 
 /* Menü */
+
+#menu {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
 
 nav {
     display: flex;
@@ -83,6 +147,8 @@ nav {
 }
 
 #title {
+    opacity: 0;
+    transition: none;
     height: 13vh;
     opacity: 100%;
     display: block;
@@ -126,6 +192,7 @@ h1 {
     color: white;
     margin-left: 35vw;
     text-decoration: underline 2px;
+    padding-bottom: 5vh;
 }
 
 h2 {
@@ -139,4 +206,32 @@ h2 {
     padding-top: 1.6vh;
     margin-left: 20vw;
     border-radius: 5%;
+}
+
+h3 {
+    position: absolute;
+    top: 7.5vh;
+    left: 5vw;
+    color: white;
+    border: white solid 3px;
+    padding: 2vh;
+    height: fit-content;
+    font-size: 6vh;
+}
+
+h4 {
+    color: white;
+    font-size: 4vh;
+    padding-top: 3vh;
+}
+
+#colorSelect {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 18vh;
+}
+
+#colorSelect > h2 {
+    margin-right: 5vw;
 }

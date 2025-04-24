@@ -6,17 +6,18 @@
     <title>Asteroids</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <script src="game.js" defer></script>
 </head>
 <body id="body">
     <img id="arcadeMachine" onclick="zoomIn()" src="../images/ArcadeMashine.png" alt="">
     <img id="arcadeScreen" onclick="zoomIn()" src="../images/ArcadeScreen-empty.png" alt="">
+    <p id="clickHint">click</p>
     <div class="screen" id="menu">
         <nav id="navigation">
-            <p class="button" onclick="gameStart()">Game</p>
+            <p class="button" onclick="gameInitiate()">Game</p>
             <p class="button" onclick="options()">Options</p>
         </nav>
         <img class="asteroidsTitle" id="title" src="../images/Asteroids.png">
-        <img id="arcadeScreenEdge" src="../images/ArcadeScreen-empty.png">
     </div>
 </body>
 </html>
