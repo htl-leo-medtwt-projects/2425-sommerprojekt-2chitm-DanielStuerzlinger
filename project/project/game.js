@@ -427,10 +427,10 @@ function gameInitiate() {
         ship.score -= up.cost;
         up.level++;
         if (up.level < MAX_UPGRADE_LEVEL) {
-          let newCost = Math.round(up.cost * 1.15 / 10) * 10;
-          up.cost = Math.min(newCost, 1000);
+          let newCost = Math.round(up.cost * 1.3 / 10) * 10;
+          up.cost = Math.min(newCost, 1500);
         } else {
-          up.cost = 1000;
+          up.cost = 1500;
         }
         applyUpgradeEffects();
       }
