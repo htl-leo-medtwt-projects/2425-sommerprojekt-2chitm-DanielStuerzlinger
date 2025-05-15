@@ -49,20 +49,49 @@ function zoomIn() {
 
 
 function options() {
-    body.style.overflowY = 'scroll'
-    menu.style.height = 'fit-content'
+    body.style.overflowY = 'scroll';
+    menu.style.height = 'fit-content';
 
     menu.innerHTML = `
         <h3 onclick="closeOptions()">Back</h3>
         <h1>Options</h1>
-        <div id="colorSelect"><h2>Color</h2><h4 style="text-decoration: underline 1px;">White</h4><h4>Custom<h4></div>
-        <h2>Volume</h2>
-        <h2>Hallo3</h2>
-        <h2>Hallo4 zbzsb</h2>
-        <h2>Hallo5</h2>
-        <h2>Hallo6</h2>
-        <h2>Hallo7</h2>
+        <div id="colorSelect">
+            <h2>Color</h2>
+            <sl-color-picker id="colorPicker" value="color"></sl-color-picker>
+        </div>
+        <div>
+            <h2>Volume</h2>
+            <sl-range id="volumeSlider" min="0" max="100" value="100" step="1"></sl-range>
+        </div>
+        <h2>Keybinds</h2>
+        <input type="text" id="keybindInput" placeholder="Enter keybind" />
+        <h2>Cheats</h2>
+        <div id="cheatsMenu"></div>
     `;
+
+    loadSettings();
+}
+
+function loadSettings() {
+    const savedColor = localStorage.getItem('color') || '#ffffff';
+    const savedVolume = localStorage.getItem('volume') || 100;
+    const savedKeybind = localStorage.getItem('keybind') || '';
+
+    document.getElementById('colorPicker').value = savedColor;
+    document.getElementById('volumeSlider').value = savedVolume;
+    document.getElementById('keybindInput').value = savedKeybind;
+
+    document.getElementById('colorPicker').addEventListener('input', (event) => {
+        localStorage.setItem('color', event.target.value);
+    });
+
+    document.getElementById('volumeSlider').addEventListener('input', (event) => {
+        localStorage.setItem('volume', event.target.value);
+    });
+
+    document.getElementById('keybindInput').addEventListener('input', (event) => {
+        localStorage.setItem('keybind', event.target.value);
+    });
 }
 
 function closeOptions() {

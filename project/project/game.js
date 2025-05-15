@@ -1,5 +1,3 @@
-//game.js
-
 function gameInitiate() {
     const menu = document.getElementById('menu');
     menu.innerHTML = `<canvas id="gameCanvas" tabindex="0"></canvas>`;
@@ -269,11 +267,11 @@ function gameInitiate() {
       }
 
       switch (e.code) {
-        case 'ArrowLeft':
+        case 'ArrowRight':
         case 'KeyD':
           leftPressed = true;
           break;
-        case 'ArrowRight':
+        case 'ArrowLeft':
         case 'KeyA':
           rightPressed = true;
           break;
@@ -290,11 +288,11 @@ function gameInitiate() {
       if (inUpgradePhase) return;
 
       switch (e.code) {
-        case 'ArrowLeft':
+        case 'ArrowRight':
         case 'KeyD':
           leftPressed = false;
           break;
-        case 'ArrowRight':
+        case 'ArrowLeft':
         case 'KeyA':
           rightPressed = false;
           break;
@@ -437,7 +435,7 @@ function gameInitiate() {
     }
 
     function applyUpgradeEffects() {
-      ship.agility = upgrades.agility.level * 1;
+      ship.agility = upgrades.agility.level * 1.2;
       ship.shotSize = 2 + upgrades.shot.level * 1.2;
       ship.bulletSpeed = BULLET_BASE_SPEED + upgrades.shot.level * 1;
       ship.lives = 3 + upgrades.health.level;

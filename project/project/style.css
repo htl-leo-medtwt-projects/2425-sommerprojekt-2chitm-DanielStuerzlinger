@@ -235,3 +235,19 @@ h4 {
 #colorSelect > h2 {
     margin-right: 5vw;
 }
+
+#colorPicker {
+    width: fit-content;
+    margin: 2vh;
+    margin-right: 20vw;
+    position: relative;
+    top: 5vh;
+}
+
+#volumeSlider {
+    width: 20vw;
+    margin: 2vh;
+    position: absolute;
+    right: 20%;
+    top: 60vh;
+}
