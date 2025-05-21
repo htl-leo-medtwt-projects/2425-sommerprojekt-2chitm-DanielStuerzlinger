@@ -119,9 +119,8 @@ body {
 
 #menu {
     width: 100vw;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
+    min-height: 100vh;
+    padding-bottom: 5vh;
 }
 
 nav {
@@ -165,6 +164,27 @@ nav {
     font-size: 11vh;
     padding-left: 4%;
     padding-right: 4%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+sl-button::part(base) {
+    background-color: #111;
+    border: 2px solid white;
+    color: white;
+    font-size: 3vh;
+    padding: 1vh 0.2vw;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+sl-button::part(base):hover {
+    background-color: #333;
+    transform: scale(1.05);
 }
 
 .asteroidstitle {
@@ -199,13 +219,13 @@ h2 {
     width: fit-content;
     height: 7vh;
     font-family: 'exo';
-    font-size: 7vh;
+    font-size: 5vh;
     border: white solid 3px;
     color: white;
     padding: 2vh;
     padding-top: 1.6vh;
-    margin-left: 20vw;
     border-radius: 5%;
+    margin-right: 2vw;
 }
 
 h3 {
@@ -232,16 +252,42 @@ h4 {
     height: 18vh;
 }
 
-#colorSelect > h2 {
-    margin-right: 5vw;
+#asteroidColorDiv {
+    width: 50vw;
+    display: flex;
+    flex-direction: row;
+    padding-left: 5vw;
 }
 
-#colorPicker {
+#shipColorDiv {
+    width: 50vw;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10vw;
+}
+
+#shipColorPicker {
     width: fit-content;
     margin: 2vh;
-    margin-right: 20vw;
     position: relative;
-    top: 5vh;
+    margin-top: 7.5vh;
+    margin-right: 3vw;
+}
+
+#asteroidColorPicker {
+    width: fit-content;
+    margin: 2vh;
+    position: relative;
+    margin-top: 7.5vh;
+    margin-right: 3vw;
+}
+
+#shipColorSave {
+    margin-top: 6vh;
+}
+
+#asteroidColorSave {
+    margin-top: 6vh;
 }
 
 #volumeSlider {

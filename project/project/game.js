@@ -1,4 +1,8 @@
+let round = 1;
+let paused = false;
+
 function gameInitiate() {
+  body.style.overflow = "hidden"
     const menu = document.getElementById('menu');
     menu.innerHTML = `<canvas id="gameCanvas" tabindex="0"></canvas>`;
   
@@ -22,9 +26,9 @@ function gameInitiate() {
     const SHIP_MAX_SPEED = 7;
     const BULLET_BASE_SPEED = 10;
     const BULLET_LIFE = 60;
-    const ASTEROID_NUM = 5;
+    let asteroid_num = 5;
     const ASTEROID_SIZE_BASE = 60;
-    const ASTEROID_SPEED = 50;
+    let asteroid_speed = 50;
     const ASTEROID_VERTICES = 10;
     const ASTEROID_JAGGEDNESS = 0.4;
 
@@ -119,7 +123,7 @@ function gameInitiate() {
       draw() {
         if (this.invincible > 0 && Math.floor(this.invincible / 10) % 2 === 0) return;
 
-        ctx.strokeStyle = '#ffffff';
+        ctx.strokeStyle = localStorage.getItem('shipColor') || '#ffffff';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(
@@ -191,8 +195,8 @@ function gameInitiate() {
         this.y = y;
         this.size = size;
         this.radius = size / 2;
-        this.velX = randomRange(-ASTEROID_SPEED, ASTEROID_SPEED) / FPS;
-        this.velY = randomRange(-ASTEROID_SPEED, ASTEROID_SPEED) / FPS;
+        this.velX = randomRange(-asteroid_speed, asteroid_speed) / FPS;
+        this.velY = randomRange(-asteroid_speed, asteroid_speed) / FPS;
         this.vertexCount = Math.floor(randomRange(ASTEROID_VERTICES * 0.7, ASTEROID_VERTICES * 1.3));
         this.offsets = [];
         for (let i = 0; i < this.vertexCount; i++) {
@@ -208,8 +212,9 @@ function gameInitiate() {
         if (this.y < 0 - this.radius) this.y = canvas.height + this.radius;
         else if (this.y > canvas.height + this.radius) this.y = 0 - this.radius;
       }
+      
       draw() {
-        ctx.strokeStyle = '#ffffff';
+        ctx.strokeStyle = localStorage.getItem('asteroidColor') || '#ffffff';
         ctx.lineWidth = 2;
         ctx.beginPath();
         for (let i = 0; i < this.vertexCount; i++) {
@@ -232,15 +237,23 @@ function gameInitiate() {
 
     function createAsteroids() {
       asteroids = [];
-      for (let i = 0; i < ASTEROID_NUM; i++) {
+      let numAsteroids = asteroid_num + round - 1;
+      let asteroidSpeed = asteroid_speed + (round - 1) * 15;
+
+      for (let i = 0; i < numAsteroids; i++) {
         let x, y;
         do {
           x = Math.random() * canvas.width;
           y = Math.random() * canvas.height;
         } while (distance(x, y, ship.x, ship.y) < ASTEROID_SIZE_BASE * 2);
-        asteroids.push(new Asteroid(x, y, ASTEROID_SIZE_BASE));
+        let asteroid = new Asteroid(x, y, ASTEROID_SIZE_BASE);
+        let speedFactor = asteroidSpeed / asteroid_speed;
+        asteroid.velX *= speedFactor;
+        asteroid.velY *= speedFactor;
+        asteroids.push(asteroid);
       }
     }
+
     createAsteroids();
 
     let leftPressed = false;
@@ -249,8 +262,20 @@ function gameInitiate() {
     let shootPressed = false;
 
     window.addEventListener('keydown', (e) => {
+      if (e.code === 'KeyP' && !upgradeMenuActive) {
+        paused = !paused;
+        if (paused) {
+          canvas.blur();
+        } else {
+          canvas.focus();
+        }
+      }
+
+      if (paused || upgradeMenuActive) return;
+
       if (inUpgradePhase) {
         if (e.code === 'Enter') {
+          round++;
           exitUpgradePhase();
         }
         return;
@@ -365,7 +390,7 @@ function gameInitiate() {
       ctx.fillStyle = '#ffffff';
       ['agility', 'shot', 'health'].forEach((key, i) => {
         const up = upgrades[key];
-        const costDisplay = up.level >= MAX_UPGRADE_LEVEL ? 'MAX' : `${up.cost} pts`;
+        const costDisplay = `${up.cost} pts`;
         const nameCapitalized = key.charAt(0).toUpperCase() + key.slice(1);
         const desc = key === 'agility' ? 'Increases movement speed' :
                      (key === 'shot' ? 'Larger and faster shots' : 'Extra life');
@@ -419,25 +444,23 @@ function gameInitiate() {
 
     function purchaseUpgrade(key) {
       let up = upgrades[key];
-      if (up.level >= MAX_UPGRADE_LEVEL) return;
 
       if (ship.score >= up.cost) {
         ship.score -= up.cost;
         up.level++;
-        if (up.level < MAX_UPGRADE_LEVEL) {
-          let newCost = Math.round(up.cost * 1.3 / 10) * 10;
-          up.cost = Math.min(newCost, 1500);
-        } else {
-          up.cost = 1500;
-        }
+
+        let newCost = Math.round(up.cost * 1.3 / 10) * 10;
+        up.cost = Math.min(newCost, 5000);
+
         applyUpgradeEffects();
       }
     }
 
+
     function applyUpgradeEffects() {
-      ship.agility = upgrades.agility.level * 1.2;
-      ship.shotSize = 2 + upgrades.shot.level * 1.2;
-      ship.bulletSpeed = BULLET_BASE_SPEED + upgrades.shot.level * 1;
+      ship.agility = upgrades.agility.level * 3;
+      ship.shotSize = 2 + upgrades.shot.level * 2;
+      ship.bulletSpeed = BULLET_BASE_SPEED + upgrades.shot.level * 2;
       ship.lives = 3 + upgrades.health.level;
     }
 
@@ -502,32 +525,105 @@ function gameInitiate() {
       }
     }
 
-    function draw() {
-      if (upgradeMenuActive) {
-        drawUpgradeMenu();
-        return;
-      }
+    function draw() { 
+  if (upgradeMenuActive) {
+    drawUpgradeMenu();
+    return;
+  }
 
-      ctx.fillStyle = '#000011';
+  if (paused) {
+    drawPauseMenu();
+    return;
+  }
+
+  ctx.fillStyle = '#000011';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ship.draw();
+  asteroids.forEach((ast) => ast.draw());
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '20px Exo, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(`Score: ${ship.score}`, 15, 30);
+  ctx.fillText(`Lives: ${ship.lives}`, 15, 60);
+
+  if (gameOver) {
+    updateHighscore();
+
+    ctx.fillStyle = '#ff3333';
+    ctx.font = 'bold 40px Exo, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 20);
+
+    ctx.font = '24px Exo, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(`Score: ${ship.score}`, canvas.width / 2, canvas.height / 2 + 20);
+
+    ctx.fillStyle = '#228822';
+    ctx.fillRect(canvas.width / 2 - 100, canvas.height / 2 + 60, 200, 50);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px Exo, sans-serif';
+    ctx.fillText('Hauptmenü', canvas.width / 2, canvas.height / 2 + 95);
+  }
+}
+
+canvas.addEventListener('click', (e) => {
+  if (upgradeMenuActive) return;
+
+  let rect = canvas.getBoundingClientRect();
+  let mx = e.clientX - rect.left;
+  let my = e.clientY - rect.top;
+
+  if (paused) {
+    if (
+      mx >= canvas.width / 2 - 100 &&
+      mx <= canvas.width / 2 + 100 &&
+      my >= 200 &&
+      my <= 250
+    ) {
+      location.reload();
+    }
+  }
+
+  if (gameOver) {
+    if (
+      mx >= canvas.width / 2 - 100 &&
+      mx <= canvas.width / 2 + 100 &&
+      my >= canvas.height / 2 + 60 &&
+      my <= canvas.height / 2 + 110
+    ) {
+      location.reload();
+    }
+  }
+});
+
+
+    function drawPauseMenu() {
+      ctx.fillStyle = 'rgba(0, 0, 20, 0.9)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ship.draw();
-      asteroids.forEach((ast) => ast.draw());
-
       ctx.fillStyle = '#ffffff';
-      ctx.font = '20px Exo, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText(`Score: ${ship.score}`, 15, 30);
-      ctx.fillText(`Lives: ${ship.lives}`, 15, 60);
+      ctx.font = '30px Exo, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Pause', canvas.width / 2, 100);
 
-      // Mit hilfe von ki gemacht
-      if (gameOver) {
-        ctx.fillStyle = '#ff3333';
-        ctx.font = 'bold 40px Exo, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 20);
-        ctx.font = '20px Exo, sans-serif';
-        ctx.fillText('Refresh to play again', canvas.width / 2, canvas.height / 2 + 20);
+      ctx.font = '24px Exo, sans-serif';
+      ctx.fillText(`Score: ${ship.score}`, canvas.width / 2, 160);
+
+      ctx.fillStyle = '#228822';
+      ctx.fillRect(canvas.width / 2 - 100, 200, 200, 50);
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 22px Exo, sans-serif';
+      ctx.fillText('Hauptmenü', canvas.width / 2, 235);
+    }
+
+    function updateHighscore() {
+      let highscore = parseInt(localStorage.getItem('highscore')) || 0;
+      if (ship.score > highscore) {
+        localStorage.setItem('highscore', ship.score);
       }
     }
 

@@ -1,4 +1,3 @@
-let body = document.getElementById('body');
 let menu = document.getElementById('menu');
 let title = document.getElementById('title');
 let navigation = document.getElementById('navigation');
@@ -49,54 +48,92 @@ function zoomIn() {
 
 
 function options() {
-    body.style.overflowY = 'scroll';
-    menu.style.height = 'fit-content';
+    menu.style.height = 'auto';
+    menu.style.display = 'block';
 
     menu.innerHTML = `
         <h3 onclick="closeOptions()">Back</h3>
         <h1>Options</h1>
         <div id="colorSelect">
-            <h2>Color</h2>
-            <sl-color-picker id="colorPicker" value="color"></sl-color-picker>
+            <div id="shipColorDiv">
+            <h2>Ship Color</h2>
+            <sl-color-picker id="shipColorPicker" value="#ffffff"></sl-color-picker>
+            <sl-button id="shipColorSave" onclick="saveShipColor()">Save</sl-button>
+            </div>
+            <div id="asteroidColorDiv">
+            <h2>Asteroid Color</h2>
+            <sl-color-picker id="asteroidColorPicker" value="#ffffff"></sl-color-picker>
+            <sl-button id="asteroidColorSave" onclick="saveAsteroidColor()">Save</sl-button>
+            </div>
         </div>
         <div>
-            <h2>Volume</h2>
-            <sl-range id="volumeSlider" min="0" max="100" value="100" step="1"></sl-range>
+        <h2>Volume</h2>
+        <sl-range id="volumeSlider" min="0" max="100" value="${localStorage.getItem('volume') || 100}" step="1"></sl-range>
+        <sl-button variant="primary" onclick="saveVolume()">Save Volume</sl-button>
         </div>
-        <h2>Keybinds</h2>
-        <input type="text" id="keybindInput" placeholder="Enter keybind" />
-        <h2>Cheats</h2>
-        <div id="cheatsMenu"></div>
+        <div>
+        <sl-button id="moveUp" class="keybind-button" variant="default">Move Up: ${localStorage.getItem('moveUp') || 'ArrowUp'}</sl-button>
+        <sl-button id="moveDown" class="keybind-button" variant="default">Move Down: ${localStorage.getItem('moveDown') || 'ArrowDown'}</sl-button>
+        <sl-button id="moveLeft" class="keybind-button" variant="default">Move Left: ${localStorage.getItem('moveLeft') || 'ArrowLeft'}</sl-button>
+        <sl-button id="moveRight" class="keybind-button" variant="default">Move Right: ${localStorage.getItem('moveRight') || 'ArrowRight'}</sl-button>
+        <sl-button id="shoot" class="keybind-button" variant="default">Shoot: ${localStorage.getItem('shoot') || 'Space'}</sl-button>
+        </div>
     `;
 
     loadSettings();
+
+    document.getElementById('shipColorPicker').addEventListener('input', (event) => {
+        localStorage.setItem('shipColor', event.target.value);
+    });
+
+    document.getElementById('asteroidColorPicker').addEventListener('input', (event) => {
+        localStorage.setItem('asteroidColor', event.target.value);
+    });
+
+    setupKeybindChange('moveUp', 'moveUp');
+    setupKeybindChange('moveDown', 'moveDown');
+    setupKeybindChange('moveLeft', 'moveLeft');
+    setupKeybindChange('moveRight', 'moveRight');
+    setupKeybindChange('shoot', 'shoot');
 }
 
 function loadSettings() {
-    const savedColor = localStorage.getItem('color') || '#ffffff';
-    const savedVolume = localStorage.getItem('volume') || 100;
-    const savedKeybind = localStorage.getItem('keybind') || '';
+    const savedShipColor = localStorage.getItem('shipColor') || '#ffffff';
+    const savedAsteroidColor = localStorage.getItem('asteroidColor') || '#ffffff';
+    document.getElementById('shipColorPicker').value = savedShipColor;
+    document.getElementById('asteroidColorPicker').value = savedAsteroidColor;
+}
 
-    document.getElementById('colorPicker').value = savedColor;
-    document.getElementById('volumeSlider').value = savedVolume;
-    document.getElementById('keybindInput').value = savedKeybind;
+function saveVolume() {
+    const volume = document.getElementById('volumeSlider').value;
+    localStorage.setItem('volume', volume);
+}
 
-    document.getElementById('colorPicker').addEventListener('input', (event) => {
-        localStorage.setItem('color', event.target.value);
-    });
+function saveShipColor() {
+    const color = document.getElementById('shipColorPicker').value;
+    localStorage.setItem('shipColor', color);
+}
 
-    document.getElementById('volumeSlider').addEventListener('input', (event) => {
-        localStorage.setItem('volume', event.target.value);
-    });
+function saveAsteroidColor() {
+    const color = document.getElementById('asteroidColorPicker').value;
+    localStorage.setItem('asteroidColor', color);
+}
 
-    document.getElementById('keybindInput').addEventListener('input', (event) => {
-        localStorage.setItem('keybind', event.target.value);
+function setupKeybindChange(buttonId, action) {
+    const button = document.getElementById(buttonId);
+    button.addEventListener('click', () => {
+        button.textContent = 'Press a key...';
+        const keyHandler = (e) => {
+            localStorage.setItem(action, e.code);
+            button.textContent = e.code;
+            window.removeEventListener('keydown', keyHandler);
+        };
+        window.addEventListener('keydown', keyHandler);
     });
 }
 
 function closeOptions() {
     navigation.style.display = 'block';
-    body.style.overflowY = 'hidden'
-    menu.style.height = '100vh'
+    menu.style.height = '100vh';
     menu.innerHTML = menuContent;
 }
