@@ -436,6 +436,7 @@ function gameInitiate() {
         my >= 120 + 3 * 60 + 90 &&
         my <= 120 + 3 * 60 + 130
       ) {
+        updateHighscore();
         exitUpgradePhase();
         return;
       }
@@ -482,7 +483,7 @@ function gameInitiate() {
     });
 
     function update() {
-      if (gameOver || upgradeMenuActive) return;
+      if (gameOver || upgradeMenuActive || paused) return;
 
       if (leftPressed) ship.rotate(-1);
       else if (rightPressed) ship.rotate(1);
@@ -613,6 +614,7 @@ canvas.addEventListener('click', (e) => {
 
 
     function drawPauseMenu() {
+      // Mit hilfe von ki erstellt
       ctx.fillStyle = 'rgba(0, 0, 20, 0.9)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -645,6 +647,7 @@ canvas.addEventListener('click', (e) => {
       requestAnimationFrame(gameLoop);
     }
 
+    updateHighscore();
     applyUpgradeEffects();
     gameLoop();
 }

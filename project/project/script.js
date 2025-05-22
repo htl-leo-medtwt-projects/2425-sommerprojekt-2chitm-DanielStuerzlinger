@@ -69,7 +69,7 @@ function options() {
         </div>
         <div id="volumeDiv">
         <h2>Volume</h2>
-        <sl-range id="volumeSlider" min="0" max="100" value="${localStorage.getItem('volume') || 100}" step="1"></sl-range>
+        <sl-range id="volumeSlider" min="0" max="100" value="${localStorage.getItem('volume') || 50}" step="1"></sl-range>
         <sl-button id="saveVolume" variant="primary" onclick="saveVolume()">Save Volume</sl-button>
         </div>
         <div id="keybindsDiv">
