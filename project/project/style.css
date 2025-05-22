@@ -128,7 +128,7 @@ nav {
     flex-direction: row;
     position: absolute;
     top: 50vh;
-    left: 15vw;
+    left: 17vw;
     width: 70%;
     justify-content: space-around;
     height: 15vh;
@@ -290,10 +290,41 @@ h4 {
     margin-top: 6vh;
 }
 
+#volumeDiv {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10vw;
+}
+
 #volumeSlider {
-    width: 20vw;
+    width: 40vw;
     margin: 2vh;
     position: absolute;
-    right: 20%;
+    right: 30%;
     top: 60vh;
+    padding-left: 3vw;
+    color-scheme: dark;
+}
+
+#saveVolume {
+    position: relative;
+    left: 55vw;
+    top: 6.5vh;
+}
+
+#keybindsDiv {
+    padding-left: 2vw;
+    padding-right: 2vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 7vh;
+}
+
+#highscore {
+    position: absolute;
+    top: -10vh;
+    color: white;
+    font-size: 5vh;
 }

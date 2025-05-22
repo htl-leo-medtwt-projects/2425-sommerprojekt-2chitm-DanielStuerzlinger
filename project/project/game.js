@@ -8,6 +8,13 @@ function gameInitiate() {
   
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+
+    const shootSound = new Audio('../sound/retro-shoot.mp3');
+    const explodeSound = new Audio('../sound/retro-explode.mp3');
+
+    const volume = localStorage.getItem('volume') ? localStorage.getItem('volume') / 100 : 1;
+    shootSound.volume = volume;
+    explodeSound.volume = volume;
   
     function resizeCanvas() {
       canvas.width = menu.clientWidth;
@@ -83,6 +90,8 @@ function gameInitiate() {
         if (this.canShoot && this.bullets.length < 5 && !upgradeMenuActive) {
           this.bullets.push(new Bullet(this.x, this.y, this.angle, this.shotSize, this.bulletSpeed));
           this.canShoot = false;
+          shootSound.currentTime = 0;
+          shootSound.play();
           setTimeout(() => (this.canShoot = true), 250);
         }
       }
@@ -268,6 +277,7 @@ function gameInitiate() {
           canvas.blur();
         } else {
           canvas.focus();
+          localStorage.setItem('score', ship.score);
         }
       }
 
@@ -492,6 +502,8 @@ function gameInitiate() {
             ship.bullets.splice(bIndex, 1);
             asteroids.splice(aIndex, 1);
             ship.score += 100;
+            explodeSound.currentTime = 0;
+            explodeSound.play();
             asteroids.push(...splitAsteroid(ast));
             break;
           }

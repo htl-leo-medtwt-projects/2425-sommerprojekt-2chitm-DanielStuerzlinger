@@ -1,7 +1,7 @@
 let menu = document.getElementById('menu');
 let title = document.getElementById('title');
 let navigation = document.getElementById('navigation');
-let menuContent = '<nav id="navigation"><p class="button" onclick="gameInitiate()">Game</p><p class="button" onclick="options()">Options</p></nav><img class="asteroidsTitle" id="title" src="../images/Asteroids.png">'
+let menuContent = `<nav id="navigation"><p id="highscore">Highscore: ${localStorage.getItem('highscore')}</p><p class="button" onclick="gameInitiate()">Game</p><p class="button" onclick="options()">Options</p></nav><img class="asteroidsTitle" id="title" src="../images/Asteroids.png">`
 let clickHint = document.getElementById('clickHint');
 let zoomTriggered = false;
 
@@ -41,6 +41,7 @@ function zoomIn() {
             setTimeout(() => {
                 navigation.style.opacity = 1;
                 navigation.style.display = 'flex';
+                
             }, 2500);
         }, 500);
     }
@@ -66,12 +67,12 @@ function options() {
             <sl-button id="asteroidColorSave" onclick="saveAsteroidColor()">Save</sl-button>
             </div>
         </div>
-        <div>
+        <div id="volumeDiv">
         <h2>Volume</h2>
         <sl-range id="volumeSlider" min="0" max="100" value="${localStorage.getItem('volume') || 100}" step="1"></sl-range>
-        <sl-button variant="primary" onclick="saveVolume()">Save Volume</sl-button>
+        <sl-button id="saveVolume" variant="primary" onclick="saveVolume()">Save Volume</sl-button>
         </div>
-        <div>
+        <div id="keybindsDiv">
         <sl-button id="moveUp" class="keybind-button" variant="default">Move Up: ${localStorage.getItem('moveUp') || 'ArrowUp'}</sl-button>
         <sl-button id="moveDown" class="keybind-button" variant="default">Move Down: ${localStorage.getItem('moveDown') || 'ArrowDown'}</sl-button>
         <sl-button id="moveLeft" class="keybind-button" variant="default">Move Left: ${localStorage.getItem('moveLeft') || 'ArrowLeft'}</sl-button>
