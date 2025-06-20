@@ -4,7 +4,6 @@ let navigation = document.getElementById('navigation');
 let menuContent = `<nav id="navigation"><p id="highscore">Highscore: ${localStorage.getItem('highscore')}</p><p class="button" onclick="gameInitiate()">Game</p><p class="button" onclick="options()">Options</p></nav><img class="asteroidsTitle" id="title" src="../images/Asteroids.png">`
 let clickHint = document.getElementById('clickHint');
 let zoomTriggered = false;
-
 let clickTimer = setTimeout(() => {
     if (!zoomTriggered) {
         clickHint.classList.add('show-click');
@@ -138,3 +137,8 @@ function closeOptions() {
     menu.style.height = '100vh';
     menu.innerHTML = menuContent;
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+    const highscore = localStorage.getItem('highscore') || 0;
+    document.getElementById('highscoreValue').textContent = highscore;
+});

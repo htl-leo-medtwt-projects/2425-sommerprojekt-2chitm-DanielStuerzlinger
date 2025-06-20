@@ -9,7 +9,6 @@ myFont.load().then(function(font) {
 let round = 1;
 let paused = false;
 let upgradeCards = [];
-   
 
 // Initialisiert das Spiel und das Canvas
 function gameInitiate() {
@@ -46,11 +45,11 @@ function gameInitiate() {
   const BULLET_BASE_SPEED = 10;
   const BULLET_LIFE = 60;
   const ASTEROID_SIZE_BASE = 60;
-  let asteroid_num = 5;
-  let asteroid_speed = 50;
   const ASTEROID_VERTICES = 10;
   const ASTEROID_JAGGEDNESS = 0.4;
 
+  let asteroid_num = 5;
+  let asteroid_speed = 50;
   let upgradeMenuActive = false;
   let upgrades = {
     agility: { level: 0, cost: 100 },
@@ -122,7 +121,7 @@ function gameInitiate() {
     // Aktualisiert die Position und den Zustand des Raumschiffs
     update() {
       this.angle += this.rotation;
-      this.angle = (this.angle + 360) % 360; // Normalisiert den Winkel
+      this.angle = (this.angle + 360) % 360;
 
       if (this.thrusting) {
         this.thrust.x += (SHIP_ACCELERATION * Math.cos(degToRad(this.angle))) / FPS;
@@ -225,11 +224,17 @@ function gameInitiate() {
 
     // Zeichnet die Kugel
     draw() {
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    ctx.fillStyle = '#ffffff';
+    const width = 10;
+    const height = 2;
+    const angle = Math.atan2(this.velY, this.velX);
+
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(angle);
+    ctx.fillRect(-width / 2, -height / 2, width, height);
+    ctx.restore();
+  }
   }
 
   // Klasse für die Asteroiden
@@ -667,7 +672,7 @@ function exitUpgradePhase() {
     ctx.fillText(`Score: ${ship.score}`, canvas.width / 2, canvas.height / 2 + 20);
 
     ctx.fillStyle = '#228822';
-    ctx.fillRect(canvas.width / 2 - 120, canvas.height / 2 + 60, 240, 50); // Increased button size
+    ctx.fillRect(canvas.width / 2 - 120, canvas.height / 2 + 60, 240, 50);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 22px Exo, sans-serif';
@@ -734,14 +739,12 @@ localStorage.setItem('highscore', ship.score);
 }
 }
 
-// Haupt-Game-Loop: Update und Draw
 function gameLoop() {
 update();
 draw();
 requestAnimationFrame(gameLoop);
 }
 
-  // Haupt-Game-Loop: Update und Draw
   function gameLoop() {
     update();
     draw();
